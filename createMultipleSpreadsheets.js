@@ -1,4 +1,3 @@
-
 function createMultipleSpreadsheets() {
   const uniqueFileNames = getUniqueFileNames();
   uniqueFileNames.forEach((fileName) => {
@@ -37,8 +36,8 @@ function createNewSpreadsheet(fileName) {
   folder.addFile(file);
   DriveApp.getRootFolder().removeFile(file);
 
-  return newFile;
-}
+    return newFile;
+  }
 
 function removeDefaultSheet(spreadsheet) {
   spreadsheet.deleteSheet(spreadsheet.getSheetByName('Sheet1'));
@@ -49,28 +48,28 @@ function getFileType(fileName, currentSheetName, fileType) {
   if (fileName.includes('GOH') && fileName.includes('CTV')) return 'GOH / CTV';
   if (fileName.includes('GOH') && fileName.includes('Display')) return 'GOH / Display';
   if (fileName.includes('GOH') && fileName.includes('Audio')) return 'GOH / Audio';
+    if (fileName.includes('GOH') && fileName.includes('DOOH')) return 'GOH / DOOH';
+    if (fileName.includes('GOH') && fileName.includes('YouTube')) return 'GOH / YouTube';
 
-  if (fileName.includes('MOL') && fileName.includes('Video')) return 'MOL / Video';
-  if (fileName.includes('MOL') && fileName.includes('CTV')) return 'MOL / CTV';
-  if (fileName.includes('MOL') && fileName.includes('Display')) return 'MOL / Display';
-  if (fileName.includes('MOL') && fileName.includes('Audio')) return 'MOL / Audio';
 
-  if (fileName.includes('SJNY') && fileName.includes('Video')) return 'SJNY / Video';
-  if (fileName.includes('SJNY') && fileName.includes('CTV')) return 'SJNY / CTV';
-  if (fileName.includes('SJNY') && fileName.includes('Display')) return 'SJNY / Display';
-  if (fileName.includes('SJNY') && fileName.includes('Audio')) return 'SJNY / Audio';
 
-  if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('Video')) return 'Others / Video';
-  if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('CTV')) return 'Others / CTV';
-  if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('Display')) return 'Others / Display';
-  if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('Audio')) return 'Others / Audio';
+    // if (fileName.includes('MOL') && fileName.includes('Video')) return 'MOL / Video';
+    // if (fileName.includes('MOL') && fileName.includes('CTV')) return 'MOL / CTV';
+    // if (fileName.includes('MOL') && fileName.includes('Display')) return 'MOL / Display';
+    // if (fileName.includes('MOL') && fileName.includes('Audio')) return 'MOL / Audio';
 
-  if (fileName.includes('YouTube')) return 'YouTube';
-  if (fileName.includes('DOOH')) return 'DOOH';
+    // if (fileName.includes('SJNY') && fileName.includes('Video')) return 'SJNY / Video';
+    // if (fileName.includes('SJNY') && fileName.includes('CTV')) return 'SJNY / CTV';
+    // if (fileName.includes('SJNY') && fileName.includes('Display')) return 'SJNY / Display';
+    // if (fileName.includes('SJNY') && fileName.includes('Audio')) return 'SJNY / Audio';
 
-  if (!fileName.includes('GOH') && fileName.includes('Display') && currentSheetName === 'Stat by creatives') return 'ALL - GOH';
+    // if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('Video')) return 'Others / Video';
+    // if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('CTV')) return 'Others / CTV';
+    // if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('Display')) return 'Others / Display';
+    // if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('Audio')) return 'Others / Audio';
 
-}
+
+  }
 
 function createSheets(spreadsheet, fileName, fileType) {
   config.sheetsData.forEach((sheetData) => {
@@ -95,12 +94,17 @@ function createSheets(spreadsheet, fileName, fileType) {
 
 function createSheetWithHeaders(spreadsheet, sheetData, fileType) {
   let headers, merge;
-  if (sheetData.name === 'Total' && sheetData.types[fileType]) {
+  if (sheetData.types && sheetData.types[fileType]) {
     headers = sheetData.types[fileType].headers;
     merge = sheetData.types[fileType].merge;
   } else {
     headers = sheetData.headers;
     merge = sheetData.merge;
+  }
+
+  if (!headers) {
+    Logger.log('Ошибка: заголовки не определены для fileType: ' + fileType);
+    return;
   }
 
   const sheet = spreadsheet.insertSheet(sheetData.name);
@@ -110,3 +114,4 @@ function createSheetWithHeaders(spreadsheet, sheetData, fileType) {
     sheet.getRange(...merge).merge().setHorizontalAlignment('center');
   }
 }
+

@@ -1,3 +1,4 @@
+// @ts-nocheck
 const config = {
   // Идентификаторы ресурсов
   folderId: '1BBJSkhFeA67WDOgbRFnrBOb82JqbbMn4',
@@ -37,6 +38,18 @@ const config = {
           merge: [1, 1, 1, 19]
         },
 
+        'GOH / YouTube': {
+          headers: ['Totals by campaign,,,,,,',
+            'Campaign,Impressions,Views,Clicks,Cost,VCR,CPV'],
+          merge: [1, 1, 1, 7]
+        },
+
+        'GOH / DOOH': {
+          headers: ['Totals by campaign,,,',
+            'Campaign,Impressions,Cost,CPM'],
+          merge: [1, 1, 1, 4]
+        },
+
 
 
         'MOL / Video': {
@@ -60,6 +73,18 @@ const config = {
           headers: ['Totals by campaign,,,,,,,,,,,,',
             'Campaign,Impressions,Viewable Impressions,Unique Inpressions,Clicks,CTR,Cost,CPM,VR,Complete views/listens,ACR/VCR,PV Conversions,Total Conversions'],
           merge: [1, 1, 1, 13]
+        },
+
+        'MOL / YouTube': {
+          headers: ['Totals by campaign,,,,,,',
+            'Campaign,Impressions,Views,Clicks,Cost,VCR,CPV'],
+          merge: [1, 1, 1, 7]
+        },
+
+        'MOL / DOOH': {
+          headers: ['Totals by campaign,,,',
+            'Campaign,Impressions,Cost,CPM'],
+          merge: [1, 1, 1, 4]
         },
 
 
@@ -87,6 +112,19 @@ const config = {
           merge: [1, 1, 1, 22]
         },
 
+        'SJNY / YouTube': {
+          headers: ['Totals by campaign,,,,,,',
+            'Campaign,Impressions,Views,Clicks,Cost,VCR,CPV'],
+          merge: [1, 1, 1, 7]
+        },
+
+        'SJNY / DOOH': {
+          headers: ['Totals by campaign,,,',
+            'Campaign,Impressions,Cost,CPM'],
+          merge: [1, 1, 1, 4]
+        },
+
+
 
         'Others / Video': {
           headers: ['Totals by campaign,,,,,,,,,,',
@@ -111,15 +149,13 @@ const config = {
           merge: [1, 1, 1, 11]
         },
 
-
-        // YOUTUBE и DOOH
-        'All YouTube': {
+        'Others / YouTube': {
           headers: ['Totals by campaign,,,,,,',
             'Campaign,Impressions,Views,Clicks,Cost,VCR,CPV'],
           merge: [1, 1, 1, 7]
         },
 
-        'All DOOH': {
+        'Others / DOOH': {
           headers: ['Totals by campaign,,,',
             'Campaign,Impressions,Cost,CPM'],
           merge: [1, 1, 1, 4]
@@ -145,6 +181,14 @@ const config = {
           headers: ['Campaign,Creative,Date,Impressions,Viewable Impressions,Unique Impressions,Clicks,CTR,Cost,CPM,VR,Complete views/listens,ACR/VCR,Book a Visit,Map Directions,Phone Calls,Book a Visit  -  Post View,Map Directions - Post View,Phone Calls  - Post View,In-store Visits']
         },
 
+        'GOH / YouTube': {
+          headers: ['Campaign,Creative,Date,Impressions,Views,Clicks,Cost,VCR,CPV']
+        },
+
+        'GOH / DOOH': {
+          headers: ['Campaign,Creative,Date,Impressions,CPM,Cost,Location']
+        },
+
 
 
         'MOL / Video': {
@@ -161,6 +205,14 @@ const config = {
 
         'MOL / Audio': {
           headers: ['Campaign,Creative,Date,Impressions,Viewable Impressions,Unique Impressions,Clicks,CTR,Cost,CPM,VR,Complete views/listens,ACR/VCR,PV Conversions']
+        },
+
+        'MOL / YouTube': {
+          headers: ['Campaign,Creative,Date,Impressions,Views,Clicks,Cost,VCR,CPV']
+        },
+
+        'MOL / DOOH': {
+          headers: ['Campaign,Creative,Date,Impressions,CPM,Cost,Location']
         },
 
 
@@ -181,6 +233,15 @@ const config = {
           headers: ['Campaign,Creative,Date,Impressions,Viewable Impressions,Unique Impressions,Clicks,CTR,Cost,CPM,VR,Complete views/listens,ACR/VCR,Brookyln RFI Form PV,Brooklyn Application PV ,Long Island RFI Form PV,Online RFI Form PV,Long Island & Online Application PV,Brookyln RFI Form PC,Brooklyn Application PC,Long Island RFI Form PC,Online RFI Form PC ,Long Island & Online Application PC']
         },
 
+        'SJNY / YouTube': {
+          headers: ['Campaign,Creative,Date,Impressions,Views,Clicks,Cost,VCR,CPV']
+        },
+
+        'SJNY / DOOH': {
+          headers: ['Campaign,Creative,Date,Impressions,CPM,Cost,Location']
+        },
+
+
 
         'Others / Video': {
           headers: ['Campaign,Creative,Date,Impressions,Viewable Impressions,Unique Impressions,Clicks,CTR,Cost,CPM,VR,Complete views/listens,ACR/VCR']
@@ -198,17 +259,13 @@ const config = {
           headers: ['Campaign,Creative,Date,Impressions,Viewable Impressions,Unique Impressions,Clicks,CTR,Cost,CPM,VR,Complete views/listens,ACR/VCR']
         },
 
-
-
-        // YOUTUBE и DOOH
-        'YouTube': {
+        'Others / YouTube': {
           headers: ['Campaign,Creative,Date,Impressions,Views,Clicks,Cost,VCR,CPV']
         },
 
-        'DOOH': {
+        'Others / DOOH': {
           headers: ['Campaign,Creative,Date,Impressions,CPM,Cost,Location']
         },
-
       }
     },
     {
@@ -217,18 +274,25 @@ const config = {
         'GOH / Display': {
           headers: ['Creative,Viewable Impressions,Clicks,CTR']
         },
-        'All - GOH': {
+        'MOL / Display': {
           headers: ['Creative,Impressions,Clicks,CTR']
         },
+        'SJNY / Display': {
+          headers: ['Creative,Impressions,Clicks,CTR']
+        },
+        'Others / Display': {
+          headers: ['Creative,Impressions,Clicks,CTR']
+        },
+
       }
     },
     {
       name: 'Stat by sites',
       types: {
-        'GOH / Display': {
+        'SBS + GOH': {
           headers: ['Site,Viewable Impressions,Clicks,CTR']
         },
-        'ALL - GOH': {
+        'SBS + ALL - GOH': {
           headers: ['Site,Impressions,Clicks,CTR']
         },
       }
