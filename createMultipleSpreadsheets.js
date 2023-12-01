@@ -67,6 +67,9 @@ function getFileType(fileName) {
 
   if (fileName.includes('YouTube')) return 'YouTube';
   if (fileName.includes('DOOH')) return 'DOOH';
+
+  if (!fileName.includes('GOH') && fileName.includes('Display') && currentSheetName === 'Stat by creatives') return 'ALL - GOH';
+
 }
 
 function createSheets(spreadsheet, fileType) {
