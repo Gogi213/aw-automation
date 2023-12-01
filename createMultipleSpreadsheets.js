@@ -74,18 +74,19 @@ function getFileType(fileName) {
 
 function createSheets(spreadsheet, fileType) {
   config.sheetsData.forEach((sheetData) => {
+    const updatedFileType = getFileType(fileName, sheetData.name);
     switch (sheetData.name) {
       case 'Total':
-        createSheetWithHeaders(spreadsheet, sheetData, fileType);
+        createSheetWithHeaders(spreadsheet, sheetData, updatedFileType);
         break;
       case 'Stat by day':
-        createSheetWithHeaders(spreadsheet, sheetData, fileType);
+        createSheetWithHeaders(spreadsheet, sheetData, updatedFileType);
         break;
       case 'Stat by creatives':
-        createSheetWithHeaders(spreadsheet, sheetData, fileType);
+        createSheetWithHeaders(spreadsheet, sheetData, updatedFileType);
         break;
       case 'Stat by sites':
-        createSheetWithHeaders(spreadsheet, sheetData, fileType);
+        createSheetWithHeaders(spreadsheet, sheetData, updatedFileType);
         break;      
     }
   });
