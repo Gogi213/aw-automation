@@ -182,8 +182,6 @@ const config = {
         },
 
 
-
-
         'Others / Video': {
           headers: ['Campaign,Creative,Date,Impressions,Viewable Impressions,Unique Impressions,Clicks,CTR,Cost,CPM,VR,Complete views/listens,ACR/VCR']
         },
@@ -203,11 +201,11 @@ const config = {
 
 
         // YOUTUBE и DOOH
-        'All YouTube': {
+        'YouTube': {
           headers: ['Campaign,Creative,Date,Impressions,Views,Clicks,Cost,VCR,CPV']
         },
 
-        'ALL DOOH': {
+        'DOOH': {
           headers: ['Campaign,Creative,Date,Impressions,CPM,Cost,Location']
         },
 
@@ -216,7 +214,7 @@ const config = {
     {
       name: 'Stat by creatives',
       types: {
-        'GOH': {
+        'GOH / Display': {
           headers: ['Creative,Viewable Impressions,Clicks,CTR']
         },
         'All - GOH': {
@@ -227,7 +225,7 @@ const config = {
     {
       name: 'Stat by sites',
       types: {
-        'GOH': {
+        'GOH / Display': {
           headers: ['Site,Viewable Impressions,Clicks,CTR']
         },
         'ALL - GOH': {

@@ -65,17 +65,8 @@ function getFileType(fileName) {
   if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('Display')) return 'Others / Display';
   if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('Audio')) return 'Others / Audio';
 
-
-
-  // Упомяну здесь, но по факту в case нужно слева добавить бренд, чтобы возвращало не Total а GOH / Total
-
-
-
-
-
   if (fileName.includes('YouTube')) return 'YouTube';
   if (fileName.includes('DOOH')) return 'DOOH';
-  // Добавьте здесь другие условия для различных типов файлов, если необходимо
 }
 
 function createSheets(spreadsheet, fileType) {
@@ -92,7 +83,7 @@ function createSheets(spreadsheet, fileType) {
         break;
       case 'Stat by sites':
         createSheetWithHeaders(spreadsheet, sheetData, fileType);
-        break;
+        break;      
     }
   });
 }
