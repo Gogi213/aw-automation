@@ -51,6 +51,10 @@ function getFileType(fileName, currentSheetName, fileType) {
     if (fileName.includes('GOH') && fileName.includes('DOOH')) return 'GOH / DOOH';
     if (fileName.includes('GOH') && fileName.includes('YouTube')) return 'GOH / YouTube';
 
+    if (currentSheetName === 'Stat by sites' && fileName.includes('GOH')) return 'SBS + GOH';
+    if (currentSheetName === 'Stat by sites' && !fileName.includes('GOH')) return 'SBS + ALL - GOH';
+
+
 
 
     // if (fileName.includes('MOL') && fileName.includes('Video')) return 'MOL / Video';
