@@ -8,7 +8,7 @@ function createMultipleSpreadsheets() {
       return;
     }
     const newFile = createNewSpreadsheet(fileName);
-    createSheets(newFile, getFileType(fileName));
+    createSheets(newFile, fileName, getFileType(fileName)); // Передаем fileName как аргумент
     removeDefaultSheet(newFile);
 
     Logger.log(`Файл ${fileName} успешно создан.`);
@@ -44,7 +44,7 @@ function removeDefaultSheet(spreadsheet) {
   spreadsheet.deleteSheet(spreadsheet.getSheetByName('Sheet1'));
 }
 
-function getFileType(fileName) {
+function getFileType(fileName, currentSheetName, fileType) {
   if (fileName.includes('GOH') && fileName.includes('Video')) return 'GOH / Video';
   if (fileName.includes('GOH') && fileName.includes('CTV')) return 'GOH / CTV';
   if (fileName.includes('GOH') && fileName.includes('Display')) return 'GOH / Display';
@@ -72,9 +72,10 @@ function getFileType(fileName) {
 
 }
 
-function createSheets(spreadsheet, fileType) {
+function createSheets(spreadsheet, fileName, fileType) {
   config.sheetsData.forEach((sheetData) => {
-    const updatedFileType = getFileType(fileName, sheetData.name);
+    // Передаем имя текущего листа и тип файла в getFileType
+    const updatedFileType = getFileType(fileName, sheetData.name, fileType);
     switch (sheetData.name) {
       case 'Total':
         createSheetWithHeaders(spreadsheet, sheetData, updatedFileType);
