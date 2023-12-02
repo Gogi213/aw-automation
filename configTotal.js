@@ -11,20 +11,20 @@ function aggregateAndMapDataForAllFiles_campaigns123() {
   const folder = DriveApp.getFolderById(folderId);
   const files = folder.getFiles();
 
-  while (files.hasNext()) {
+
     const file = files.next();
     const fileName = file.getName();
 
     // Проверяем, содержит ли имя файла "Display"
     if (!fileName.includes("Display")) {
-      continue; // Если не содержит, переходим к следующему файлу
+      return; // Если не содержит, переходим к следующему файлу
     }
 
     const ss = SpreadsheetApp.openById(sourceSpreadsheetId);
     const sheet = ss.getSheetByName('union_date');
     const allData = sheet.getRange('A2:AE' + sheet.getLastRow()).getValues();
     const filteredData = allData.filter(row => row[30] === fileName);
-    const mapping = { 1: 3, 2: 9, 3: 10, 4: 11, 5: 13, 7: 15, 9: 20, 10: 21, 11: 22, 12: 23, 13: 24, 14: 25, 15: 26 };
+  const mapping = { 1: 3, 2: 9, 3: 10, 4: 11, 5: 13, 7: 15, 9: 20, 10: 21, 11: 22, 12: 23, 13: 24, 14: 25, 15: 26 };
     const aggregatedData = {};
 
     filteredData.forEach(row => {
@@ -99,8 +99,7 @@ function aggregateAndMapDataForAllFiles_campaigns123() {
     // Применяем жирное форматирование к строке тоталов
     targetSheet.getRange(output.length + 2, 1, 1, 26).setFontWeight("bold");
 
-    Logger.log('Данные успешно агрегированы и записаны для файла: ' + fileName);
-  }
+  Logger.log('Данные успешно агрегированы и записаны для файла: ' + fileName);
 }
 
 
@@ -112,7 +111,6 @@ function aggregateAndMapDataForAllFiles_campaigns4() {
   const folder = DriveApp.getFolderById(folderId);
   const files = folder.getFiles();
 
-  while (files.hasNext()) {
     const file = files.next();
     const fileName = file.getName();
 
@@ -200,7 +198,7 @@ function aggregateAndMapDataForAllFiles_campaigns4() {
       targetSheet.getRange(3, 6, output.length + 1, 1).setNumberFormat("0.00%");
       targetSheet.getRange(3, 7, output.length + 1, 2).setNumberFormat("$#,##0.00");
       targetSheet.getRange(3, 9, output.length + 1, 1).setNumberFormat("0.00%");
-      targetSheet.getRange(3, 10, output.length + 1, 1).setNumberFormat("#,##0");
+      targetSheet.getRange(3, 10, output.length + 1, 1).setNumberFormat("#,##0");      
       targetSheet.getRange(3, 11, output.length + 1, 1).setNumberFormat("0.00%");
       targetSheet.getRange(3, 12, output.length + 1, 7).setNumberFormat("#,##0");
 
@@ -208,10 +206,4 @@ function aggregateAndMapDataForAllFiles_campaigns4() {
 
       Logger.log('Данные успешно агрегированы и записаны для файла: ' + fileName);
     }
-  }
 }
-
-
-
-
-
