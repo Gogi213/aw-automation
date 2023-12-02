@@ -8,10 +8,10 @@ function processFilesInFolder(folderId) {
 
     if (fileName.includes("Display")) {
       // Вызов функции из displayTotalCampaign.js
-      aggregateAndMapDataForAllFiles_campaigns44444444(file);
+      aggregateAndMapDataForAllFiles_campaignsDisplay(file);
     } else if (fileName.includes("Video")) {
       // Вызов функции из videoTotalCampaign.js
-      aggregateAndMapDataForAllFiles_campaigns4(file);
+      aggregateAndMapDataForAllFiles_campaignsVideo(file);
     } else {
       // Обработка других случаев или вывод сообщения об ошибке
       console.log("Неизвестный тип файла: " + fileName);
