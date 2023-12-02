@@ -1,6 +1,6 @@
 function aggregateAndMapDataForAllFiles_campaigns4() {
   const folderId = '1Voz3zu5Tkx6Gtdn9KOsnhXpAQB79yie3';
-  const sourceSpreadsheetId = '1a9qhTubxbdew9IfstH0v7dQijexTBs9jbkkBIIXV-cs';
+  const sourceSpreadsheetId = configTotal.sourceSpreadsheetId;
 
   const folder = DriveApp.getFolderById(folderId);
   const files = folder.getFiles();
