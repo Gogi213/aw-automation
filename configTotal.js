@@ -4,14 +4,14 @@ const configTotal = {
 };
 
 // Функция для Display
-function aggregateAndMapDataForAllFiles_campaigns123() {
+function aggregateAndMapDataForAllFiles_campaignsDisplay() {
   const folderId = '1S2HuGudocrjfLY8Ag65RrYceCFZfzdzC';
   const sourceSpreadsheetId = configTotal.sourceSpreadsheetId;
 
   const folder = DriveApp.getFolderById(folderId);
   const files = folder.getFiles();
 
-
+  while (files.hasNext()) {
     const file = files.next();
     const fileName = file.getName();
 
@@ -24,7 +24,7 @@ function aggregateAndMapDataForAllFiles_campaigns123() {
     const sheet = ss.getSheetByName('union_date');
     const allData = sheet.getRange('A2:AE' + sheet.getLastRow()).getValues();
     const filteredData = allData.filter(row => row[30] === fileName);
-  const mapping = { 1: 3, 2: 9, 3: 10, 4: 11, 5: 13, 7: 15, 9: 20, 10: 21, 11: 22, 12: 23, 13: 24, 14: 25, 15: 26 };
+    const mapping = { 1: 3, 2: 9, 3: 10, 4: 11, 5: 13, 7: 15, 9: 20, 10: 21, 11: 22, 12: 23, 13: 24, 14: 25, 15: 26 };
     const aggregatedData = {};
 
     filteredData.forEach(row => {
@@ -99,18 +99,20 @@ function aggregateAndMapDataForAllFiles_campaigns123() {
     // Применяем жирное форматирование к строке тоталов
     targetSheet.getRange(output.length + 2, 1, 1, 26).setFontWeight("bold");
 
-  Logger.log('Данные успешно агрегированы и записаны для файла: ' + fileName);
+    Logger.log('Данные успешно агрегированы и записаны для файла: ' + fileName);
+  }
 }
 
 
 // Функция для видео
-function aggregateAndMapDataForAllFiles_campaigns4() {
+function aggregateAndMapDataForAllFiles_campaignsVideo() {
   const folderId = '1Voz3zu5Tkx6Gtdn9KOsnhXpAQB79yie3';
   const sourceSpreadsheetId = configTotal.sourceSpreadsheetId;
 
   const folder = DriveApp.getFolderById(folderId);
   const files = folder.getFiles();
 
+  while (files.hasNext()) {
     const file = files.next();
     const fileName = file.getName();
 
@@ -206,4 +208,5 @@ function aggregateAndMapDataForAllFiles_campaigns4() {
 
       Logger.log('Данные успешно агрегированы и записаны для файла: ' + fileName);
     }
+  }
 }
