@@ -17,7 +17,7 @@ function aggregateAndMapDataForAllFiles_campaignsDisplay() {
 
     // Проверяем, содержит ли имя файла "Display"
     if (!fileName.includes("Display")) {
-      return; // Если не содержит, переходим к следующему файлу
+      continue; // Если не содержит, переходим к следующему файлу
     }
 
     const ss = SpreadsheetApp.openById(sourceSpreadsheetId);
