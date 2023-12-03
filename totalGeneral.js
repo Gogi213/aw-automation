@@ -1,33 +1,24 @@
-function processDisplayFiles() {
-  const folderId = '1S2HuGudocrjfLY8Ag65RrYceCFZfzdzC'; // Замените на реальный ID папки
-  const folder = DriveApp.getFolderById(folderId);
-  const files = folder.getFiles();
+function runBothFunctions() {
+  var scriptProperties = PropertiesService.getScriptProperties();
+  var isOperationCompleted = scriptProperties.getProperty('isOperationCompleted');
 
-  if (files.hasNext()) {
-    const file = files.next();
-    const fileName = file.getName();
+  if (isOperationCompleted !== 'true') {
+    aggregateAndMapDataForAllFiles_campaignsDisplay900();
+    aggregateAndMapDataForAllFiles_campaignsAudio900();
+    aggregateAndMapDataForAllFiles_campaignsVideo900();
+    aggregateAndMapDataForAllFiles_campaignsCTV900();
+    aggregateAndMapDataForAllFiles_campaignsDOOH900();        
 
-    if (fileName.includes("Display")) {
-      aggregateAndMapDataForAllFiles_campaignsDisplay()
-    }
+    // Установка флага, что операции выполнены
+    scriptProperties.setProperty('isOperationCompleted', 'true');
+  } else {
+    Logger.log('Операции уже были выполнены в этой сессии.');
   }
+
+  // Сброс флага в конце выполнения функций
+  resetOperationFlag();
 }
 
-function processVideoFiles() {
-  const folderId = '1Voz3zu5Tkx6Gtdn9KOsnhXpAQB79yie3'; // Замените на реальный ID папки
-  const folder = DriveApp.getFolderById(folderId);
-  const files = folder.getFiles();
-
-  if (files.hasNext()) {
-    const file = files.next();
-    const fileName = file.getName();
-
-    if (fileName.includes("Video")) {
-      aggregateAndMapDataForAllFiles_campaignsVideo()
-    }
-  }
+function resetOperationFlag() {
+  PropertiesService.getScriptProperties().deleteProperty('isOperationCompleted');
 }
-
-// Вызов функций
-processDisplayFiles();
-processVideoFiles();
