@@ -1,3 +1,5 @@
+// spreadsheetMain
+
 function createMultipleSpreadsheets() {
   const uniqueFileNames = getUniqueFileNames();
   uniqueFileNames.forEach((fileName) => {
@@ -36,8 +38,8 @@ function createNewSpreadsheet(fileName) {
   folder.addFile(file);
   DriveApp.getRootFolder().removeFile(file);
 
-    return newFile;
-  }
+  return newFile;
+}
 
 function removeDefaultSheet(spreadsheet) {
   spreadsheet.deleteSheet(spreadsheet.getSheetByName('Sheet1'));
@@ -48,37 +50,36 @@ function getFileType(fileName, currentSheetName, fileType) {
   if (fileName.includes('GOH') && fileName.includes('CTV')) return 'GOH / CTV';
   if (fileName.includes('GOH') && fileName.includes('Display')) return 'GOH / Display';
   if (fileName.includes('GOH') && fileName.includes('Audio')) return 'GOH / Audio';
-    if (fileName.includes('GOH') && fileName.includes('DOOH')) return 'GOH / DOOH';
-    if (fileName.includes('GOH') && fileName.includes('YouTube')) return 'GOH / YouTube';
+  if (fileName.includes('GOH') && fileName.includes('DOOH')) return 'GOH / DOOH';
+  if (fileName.includes('GOH') && fileName.includes('YouTube')) return 'GOH / YouTube';
 
-    if (currentSheetName === 'Stat by sites' && fileName.includes('GOH')) return 'SBS + GOH';
-    if (currentSheetName === 'Stat by sites' && !fileName.includes('GOH')) return 'SBS + ALL - GOH';
+  // if (fileName.includes('MOL') && fileName.includes('Video')) return 'MOL / Video';
+  // if (fileName.includes('MOL') && fileName.includes('CTV')) return 'MOL / CTV';
+  // if (fileName.includes('MOL') && fileName.includes('Display')) return 'MOL / Display';
+  // if (fileName.includes('MOL') && fileName.includes('Audio')) return 'MOL / Audio';
 
+  // if (fileName.includes('SJNY') && fileName.includes('Video')) return 'SJNY / Video';
+  // if (fileName.includes('SJNY') && fileName.includes('CTV')) return 'SJNY / CTV';
+  // if (fileName.includes('SJNY') && fileName.includes('Display')) return 'SJNY / Display';
+  // if (fileName.includes('SJNY') && fileName.includes('Audio')) return 'SJNY / Audio';
 
-
-
-    // if (fileName.includes('MOL') && fileName.includes('Video')) return 'MOL / Video';
-    // if (fileName.includes('MOL') && fileName.includes('CTV')) return 'MOL / CTV';
-    // if (fileName.includes('MOL') && fileName.includes('Display')) return 'MOL / Display';
-    // if (fileName.includes('MOL') && fileName.includes('Audio')) return 'MOL / Audio';
-
-    // if (fileName.includes('SJNY') && fileName.includes('Video')) return 'SJNY / Video';
-    // if (fileName.includes('SJNY') && fileName.includes('CTV')) return 'SJNY / CTV';
-    // if (fileName.includes('SJNY') && fileName.includes('Display')) return 'SJNY / Display';
-    // if (fileName.includes('SJNY') && fileName.includes('Audio')) return 'SJNY / Audio';
-
-    // if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('Video')) return 'Others / Video';
-    // if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('CTV')) return 'Others / CTV';
-    // if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('Display')) return 'Others / Display';
-    // if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('Audio')) return 'Others / Audio';
+  // if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('Video')) return 'Others / Video';
+  // if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('CTV')) return 'Others / CTV';
+  // if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('Display')) return 'Others / Display';
+  // if (!fileName.includes('GOH') && !fileName.includes('SJNY') && !fileName.includes('MOL') && fileName.includes('Audio')) return 'Others / Audio';
 
 
-  }
+}
 
 function createSheets(spreadsheet, fileName, fileType) {
   config.sheetsData.forEach((sheetData) => {
-    // Передаем имя текущего листа и тип файла в getFileType
-    const updatedFileType = getFileType(fileName, sheetData.name, fileType);
+    let updatedFileType = fileType;
+
+    // Для листа "Stat by sites" выбираем структуру в зависимости от наличия "GOH" в имени файла
+    if (sheetData.name === 'Stat by sites') {
+      updatedFileType = fileName.includes('GOH') ? 'SBS + GOH' : 'SBS + ALL - GOH';
+    }
+
     switch (sheetData.name) {
       case 'Total':
         createSheetWithHeaders(spreadsheet, sheetData, updatedFileType);
@@ -91,10 +92,11 @@ function createSheets(spreadsheet, fileName, fileType) {
         break;
       case 'Stat by sites':
         createSheetWithHeaders(spreadsheet, sheetData, updatedFileType);
-        break;      
+        break;
     }
   });
 }
+
 
 function createSheetWithHeaders(spreadsheet, sheetData, fileType) {
   let headers, merge;

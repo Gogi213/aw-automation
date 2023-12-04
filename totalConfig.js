@@ -1,14 +1,20 @@
-// configTotal
+// totalConfig
+
 const configTotal = {
-  sourceSpreadsheetId: '1a9qhTubxbdew9IfstH0v7dQijexTBs9jbkkBIIXV-cs'
+  sourceSpreadsheetId: '1a9qhTubxbdew9IfstH0v7dQijexTBs9jbkkBIIXV-cs',
+  folderDisplay: '1S2HuGudocrjfLY8Ag65RrYceCFZfzdzC',
+  folderAudio: '14WsWzAGV5OBOcOyc3vRBTtLAoPYytsfu',
+  folderVideo: '1Voz3zu5Tkx6Gtdn9KOsnhXpAQB79yie3',
+  folderCTV: '1ZbnqzT5jGAxkL6bFt6V9aqZdnvs5VdAf',
+  folderDOOH: '1RJ67YMvjnypypU2gq-I-Utgmxlp-pi6t'
 };
 
-// Функция для Display
+// totalConfig / Display
 function aggregateAndMapDataForAllFiles_campaignsDisplay900() {
   const cacheControl = new CacheControl();
   cacheControl.setNoCache();
 
-  const folderId = '1S2HuGudocrjfLY8Ag65RrYceCFZfzdzC';
+  const folderId = configTotal.folderDisplay;
   const sourceSpreadsheetId = configTotal.sourceSpreadsheetId;
 
   const folder = DriveApp.getFolderById(folderId);
@@ -61,9 +67,9 @@ function aggregateAndMapDataForAllFiles_campaignsDisplay900() {
         row[2] = data[3]; // Число - 1,000
         row[3] = data[4]; // Число - 1,000
         row[4] = data[5]; // Число - 1,000
-        row[5] = '=iferror(E:E/C:C,)'; // Формула для столбца 10
+        row[5] = '=iferror(E:E/C:C,0)'; // Формула для столбца 10
         row[6] = data[7]; // Денежный
-        row[7] = '=iferror(G:G/C:C*1000,)'
+        row[7] = '=iferror(G:G/C:C*1000,0)'
 
 
         for (let i = 8; i <= 14; i++) {
@@ -79,9 +85,9 @@ function aggregateAndMapDataForAllFiles_campaignsDisplay900() {
       for (let i = 1; i <= 4; i++) {
         totalsRow[i] = `=SUM(${String.fromCharCode(65 + i)}3:${String.fromCharCode(65 + i)}${output.length + 2})`;
       }
-      totalsRow[5] = '=iferror(E:E/C:C,)';
+      totalsRow[5] = '=iferror(E:E/C:C,0)';
       totalsRow[6] = `=SUM(G3:G${output.length + 2})`;
-      totalsRow[7] = '=iferror(G:G/C:C*1000,)'
+      totalsRow[7] = '=iferror(G:G/C:C*1000,0)'
 
       for (let i = 8; i <= 14; i++) {
         totalsRow[i] = `=SUM(${String.fromCharCode(65 + i)}3:${String.fromCharCode(65 + i)}${output.length + 2})`;
@@ -112,11 +118,11 @@ function aggregateAndMapDataForAllFiles_campaignsDisplay900() {
   }
 }
 
-// Функция для Audio
+// totalConfig / Audio
 function aggregateAndMapDataForAllFiles_campaignsAudio900() {
   const cacheControl = new CacheControl();
   cacheControl.setNoCache();
-  const folderId = '14WsWzAGV5OBOcOyc3vRBTtLAoPYytsfu';
+  const folderId = configTotal.folderAudio;
   const sourceSpreadsheetId = configTotal.sourceSpreadsheetId;
 
   const folder = DriveApp.getFolderById(folderId);
@@ -169,12 +175,12 @@ function aggregateAndMapDataForAllFiles_campaignsAudio900() {
         row[2] = data[3]; // Число - 1,000
         row[3] = data[4]; // Число - 1,000
         row[4] = data[5]; // Число - 1,000
-        row[5] = '=iferror(E:E/C:C,)'; // Формула для столбца 10
+        row[5] = '=iferror(E:E/C:C,0)'; // Формула для столбца 10
         row[6] = data[7]; // Денежный
-        row[7] = '=iferror(G:G/C:C*1000,)'
-        row[8] = '=iferror(C:C/B:B,)'; // Формула для столбца 9
+        row[7] = '=iferror(G:G/C:C*1000,0)'
+        row[8] = '=iferror(C:C/B:B,0)'; // Формула для столбца 9
         row[9] = data[10];
-        row[10] = '=iferror(J:J/B:B,)'; // Формула для столбца 11
+        row[10] = '=iferror(J:J/C:C,0)'; // Формула для столбца 11
 
         for (let i = 11; i <= 17; i++) {
           row[i] = data[i + 1];
@@ -189,12 +195,12 @@ function aggregateAndMapDataForAllFiles_campaignsAudio900() {
       for (let i = 1; i <= 4; i++) {
         totalsRow[i] = `=SUM(${String.fromCharCode(65 + i)}3:${String.fromCharCode(65 + i)}${output.length + 2})`;
       }
-      totalsRow[5] = '=iferror(E:E/C:C,)';
+      totalsRow[5] = '=iferror(E:E/C:C,0)';
       totalsRow[6] = `=SUM(G3:G${output.length + 2})`;
-      totalsRow[7] = '=iferror(G:G/C:C*1000,)'
-      totalsRow[8] = '=iferror(C:C/B:B,)'
+      totalsRow[7] = '=iferror(G:G/C:C*1000,0)'
+      totalsRow[8] = '=iferror(C:C/B:B,0)'
       totalsRow[9] = `=SUM(${String.fromCharCode(65 + 9)}3:${String.fromCharCode(65 + 9)}${output.length + 2})`;
-      totalsRow[10] = '=iferror(J:J/B:B,)';
+      totalsRow[10] = '=iferror(J:J/C:C,0)';
 
       for (let i = 11; i <= 17; i++) {
         totalsRow[i] = `=SUM(${String.fromCharCode(65 + i)}3:${String.fromCharCode(65 + i)}${output.length + 2})`;
@@ -221,11 +227,11 @@ function aggregateAndMapDataForAllFiles_campaignsAudio900() {
   }
 }
 
-// Функция для видео
+// totalConfig / Video
 function aggregateAndMapDataForAllFiles_campaignsVideo900() {
   const cacheControl = new CacheControl();
   cacheControl.setNoCache();
-  const folderId = '1Voz3zu5Tkx6Gtdn9KOsnhXpAQB79yie3';
+  const folderId = configTotal.folderVideo;
   const sourceSpreadsheetId = configTotal.sourceSpreadsheetId;
 
   const folder = DriveApp.getFolderById(folderId);
@@ -280,10 +286,10 @@ function aggregateAndMapDataForAllFiles_campaignsVideo900() {
         row[4] = data[5]; // Число - 1,000
         row[5] = '=iferror(E:E/C:C,)'; // Формула для столбца 10
         row[6] = data[7]; // Денежный
-        row[7] = '=iferror(G:G/C:C*1000,)'
-        row[8] = '=iferror(C:C/B:B,)'; // Формула для столбца 9
+        row[7] = '=iferror(G:G/C:C*1000,0)'
+        row[8] = '=iferror(C:C/B:B0,)'; // Формула для столбца 9
         row[9] = data[10];
-        row[10] = '=iferror(J:J/B:B,)'; // Формула для столбца 11
+        row[10] = '=iferror(J:J/C:C,0)'; // Формула для столбца 11
 
         for (let i = 11; i <= 17; i++) {
           row[i] = data[i + 1];
@@ -298,12 +304,12 @@ function aggregateAndMapDataForAllFiles_campaignsVideo900() {
       for (let i = 1; i <= 4; i++) {
         totalsRow[i] = `=SUM(${String.fromCharCode(65 + i)}3:${String.fromCharCode(65 + i)}${output.length + 2})`;
       }
-      totalsRow[5] = '=iferror(E:E/C:C,)';
+      totalsRow[5] = '=iferror(E:E/C:C,0)';
       totalsRow[6] = `=SUM(G3:G${output.length + 2})`;
-      totalsRow[7] = '=iferror(G:G/C:C*1000,)'
-      totalsRow[8] = '=iferror(C:C/B:B,)'
+      totalsRow[7] = '=iferror(G:G/C:C*1000,0)'
+      totalsRow[8] = '=iferror(C:C/B:B,0)'
       totalsRow[9] = `=SUM(${String.fromCharCode(65 + 9)}3:${String.fromCharCode(65 + 9)}${output.length + 2})`;
-      totalsRow[10] = '=iferror(J:J/B:B,)';
+      totalsRow[10] = '=iferror(J:J/C:C,0)';
 
       for (let i = 11; i <= 17; i++) {
         totalsRow[i] = `=SUM(${String.fromCharCode(65 + i)}3:${String.fromCharCode(65 + i)}${output.length + 2})`;
@@ -330,11 +336,11 @@ function aggregateAndMapDataForAllFiles_campaignsVideo900() {
   }
 }
 
-// Функция для CTV
+// totalConfig / CTV
 function aggregateAndMapDataForAllFiles_campaignsCTV900() {
   const cacheControl = new CacheControl();
   cacheControl.setNoCache();
-  const folderId = '1ZbnqzT5jGAxkL6bFt6V9aqZdnvs5VdAf';
+  const folderId = configTotal.folderCTV;
   const sourceSpreadsheetId = configTotal.sourceSpreadsheetId;
 
   const folder = DriveApp.getFolderById(folderId);
@@ -387,12 +393,12 @@ function aggregateAndMapDataForAllFiles_campaignsCTV900() {
         row[2] = data[3]; // Число - 1,000
         row[3] = data[4]; // Число - 1,000
         row[4] = data[5]; // Число - 1,000
-        row[5] = '=iferror(E:E/C:C,)'; // Формула для столбца 10
+        row[5] = '=iferror(E:E/B:B,0)'; // Формула для столбца 10
         row[6] = data[7]; // Денежный
-        row[7] = '=iferror(G:G/C:C*1000,)'
-        row[8] = '=iferror(C:C/B:B,)'; // Формула для столбца 9
+        row[7] = '=iferror(G:G/B:B*1000,0)'
+        row[8] = '=iferror(C:C/B:B,0)'; // Формула для столбца 9
         row[9] = data[10];
-        row[10] = '=iferror(J:J/B:B,)'; // Формула для столбца 11
+        row[10] = '=iferror(J:J/B:B,0)'; // Формула для столбца 11
 
         for (let i = 11; i <= 17; i++) {
           row[i] = data[i + 1];
@@ -407,12 +413,12 @@ function aggregateAndMapDataForAllFiles_campaignsCTV900() {
       for (let i = 1; i <= 4; i++) {
         totalsRow[i] = `=SUM(${String.fromCharCode(65 + i)}3:${String.fromCharCode(65 + i)}${output.length + 2})`;
       }
-      totalsRow[5] = '=iferror(E:E/C:C,)';
+      totalsRow[5] = '=iferror(E:E/B:B,0)';
       totalsRow[6] = `=SUM(G3:G${output.length + 2})`;
-      totalsRow[7] = '=iferror(G:G/C:C*1000,)'
-      totalsRow[8] = '=iferror(C:C/B:B,)'
+      totalsRow[7] = '=iferror(G:G/B:B*1000,0)'
+      totalsRow[8] = '=iferror(C:C/B:B,0)'
       totalsRow[9] = `=SUM(${String.fromCharCode(65 + 9)}3:${String.fromCharCode(65 + 9)}${output.length + 2})`;
-      totalsRow[10] = '=iferror(J:J/B:B,)';
+      totalsRow[10] = '=iferror(J:J/B:B,0)';
 
       for (let i = 11; i <= 17; i++) {
         totalsRow[i] = `=SUM(${String.fromCharCode(65 + i)}3:${String.fromCharCode(65 + i)}${output.length + 2})`;
@@ -428,7 +434,7 @@ function aggregateAndMapDataForAllFiles_campaignsCTV900() {
       targetSheet.getRange(3, 6, output.length + 1, 1).setNumberFormat("0.00%");
       targetSheet.getRange(3, 7, output.length + 1, 2).setNumberFormat("$#,##0.00");
       targetSheet.getRange(3, 9, output.length + 1, 1).setNumberFormat("0.00%");
-      targetSheet.getRange(3, 10, output.length + 1, 1).setNumberFormat("#,##0");      
+      targetSheet.getRange(3, 10, output.length + 1, 1).setNumberFormat("#,##0");
       targetSheet.getRange(3, 11, output.length + 1, 1).setNumberFormat("0.00%");
       targetSheet.getRange(3, 12, output.length + 1, 7).setNumberFormat("#,##0");
 
@@ -439,14 +445,11 @@ function aggregateAndMapDataForAllFiles_campaignsCTV900() {
   }
 }
 
-
-
-
-// Функция для DOOH
+// totalConfig / DOOH
 function aggregateAndMapDataForAllFiles_campaignsDOOH900() {
   const cacheControl = new CacheControl();
   cacheControl.setNoCache();
-  const folderId = '1RJ67YMvjnypypU2gq-I-Utgmxlp-pi6t';
+  const folderId = configTotal.folderDOOH
   const sourceSpreadsheetId = configTotal.sourceSpreadsheetId;
 
   const folder = DriveApp.getFolderById(folderId);
@@ -497,7 +500,7 @@ function aggregateAndMapDataForAllFiles_campaignsDOOH900() {
         row[0] = data[1]; // Текст
         row[1] = data[2]; // Число - 1,000
         row[2] = data[3]; // Число - 1,000
-        row[3] = '=iferror(C:C/B:B*1000,)'
+        row[3] = '=iferror(C:C/B:B*1000,0)'
 
         output.push(row);
       });
@@ -508,7 +511,7 @@ function aggregateAndMapDataForAllFiles_campaignsDOOH900() {
         totalsRow[i] = `=SUM(${String.fromCharCode(65 + i)}3:${String.fromCharCode(65 + i)}${output.length + 2})`;
       }
 
-      totalsRow[3] = '=iferror(C:C/B:B*1000,)'
+      totalsRow[3] = '=iferror(C:C/B:B*1000,0)'
 
       output.push(totalsRow);
 
@@ -525,13 +528,3 @@ function aggregateAndMapDataForAllFiles_campaignsDOOH900() {
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
