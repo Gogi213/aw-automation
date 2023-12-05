@@ -70,3 +70,16 @@ function updateStats() {
     statSheet.getRange(lastRow + 1, 4).setNumberFormat("0.00%");
   }
 }
+
+function getLowVolumePercentage(fileName) {
+  if (fileName.includes("Display")) {
+    return 0.65;
+  } else if (fileName.includes("Video")) {
+    return 0.55;
+  } else if (fileName.includes("Audio")) {
+    return 0.25;
+  } else if (fileName.includes("CTV")) {
+    return 0.35;
+  }
+  return 0;
+}
