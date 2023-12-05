@@ -37,12 +37,29 @@ function updateStats() {
       }
     }
 
+    // Расчет процентов для LVI
+    var lviPercentage = getLowVolumePercentage(fileName);
+    var lviImpressions = impressions * lviPercentage;
+    var lviClicks = clicks * lviPercentage;
+
+    // Расчет оставшихся показов и кликов для распределения
+    var remainingImpressions = impressions - lviImpressions;
+    var remainingClicks = clicks - lviClicks;
+
+    // Распределение оставшихся показов и кликов по сайтам
+    var numSites = sites.length;
+    var impressionsPerSite = remainingImpressions / numSites;
+    var clicksPerSite = remainingClicks / numSites;
+
     // Шаг 4: Запись данных в лист Stat by sites
     var statSheet = spreadsheet.getSheetByName('Stat by sites');
     for (var k = 0; k < sites.length; k++) {
-      var row = [sites[k], impressions, clicks];
-      statSheet.appendRow(row);
-    }
+    var siteName = sites[k];
+    var siteImpressions = siteName === "Low Volume Inventory" ? lviImpressions : impressionsPerSite;
+    var siteClicks = siteName === "Low Volume Inventory" ? lviClicks : clicksPerSite;
+    var row = [siteName, siteImpressions, siteClicks];
+    statSheet.appendRow(row);
+  }
 
     // Добавление формулы и форматирования в четвёртом столбце
     var lastRow = statSheet.getLastRow();
