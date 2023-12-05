@@ -46,20 +46,21 @@ function updateStats() {
     var remainingImpressions = impressions - lviImpressions;
     var remainingClicks = clicks - lviClicks;
 
-    // Распределение оставшихся показов и кликов по сайтам
-    var numSites = sites.length;
-    var impressionsPerSite = remainingImpressions / numSites;
-    var clicksPerSite = remainingClicks / numSites;
+    // Исключение LVI из списка сайтов для распределения
+    var sitesForDistribution = sites.filter(site => site !== "Low Volume Inventory");
+
+    // Распределение оставшихся показов и кликов по сайтам с рандомизацией
+    var distributedImpressions = distributeRandomly(remainingImpressions, sitesForDistribution.length);
+    var distributedClicks = distributeRandomly(remainingClicks, sitesForDistribution.length);
 
     // Шаг 4: Запись данных в лист Stat by sites
     var statSheet = spreadsheet.getSheetByName('Stat by sites');
-    for (var k = 0; k < sites.length; k++) {
-    var siteName = sites[k];
-    var siteImpressions = siteName === "Low Volume Inventory" ? lviImpressions : impressionsPerSite;
-    var siteClicks = siteName === "Low Volume Inventory" ? lviClicks : clicksPerSite;
-    var row = [siteName, siteImpressions, siteClicks];
+    sites.forEach(site => {
+      var siteImpressions = site === "Low Volume Inventory" ? lviImpressions : distributedImpressions.shift();
+      var siteClicks = site === "Low Volume Inventory" ? lviClicks : distributedClicks.shift();
+      var row = [site, siteImpressions, siteClicks];
     statSheet.appendRow(row);
-  }
+  });
 
     // Добавление формулы и форматирования в четвёртом столбце
     var lastRow = statSheet.getLastRow();
@@ -86,6 +87,22 @@ function updateStats() {
     statSheet.getRange(lastRow + 1, 3).setNumberFormat("#,##0");
     statSheet.getRange(lastRow + 1, 4).setNumberFormat("0.00%");
   }
+}
+
+function distributeRandomly(total, count) {
+  var distribution = [];
+  var remaining = total;
+
+  for (var i = 0; i < count - 1; i++) {
+    var max = Math.min(remaining, (1 + 0.20) * (total / count));
+    var value = Math.random() * (max - total / count * 0.80) + total / count * 0.80;
+    distribution.push(value);
+    remaining -= value;
+  }
+
+  // Добавление оставшегося значения для последнего сайта
+  distribution.push(remaining);
+  return distribution;
 }
 
 function getLowVolumePercentage(fileName) {
