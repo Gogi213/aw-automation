@@ -1,7 +1,7 @@
 // statBySitesConfig
 
 function updateStats() {
-  var folderId = '1Voz3zu5Tkx6Gtdn9KOsnhXpAQB79yie3';
+  var folderId = '14WsWzAGV5OBOcOyc3vRBTtLAoPYytsfu';
   var unionDateId = '1a9qhTubxbdew9IfstH0v7dQijexTBs9jbkkBIIXV-cs';
   var sitesSheetId = '1a9qhTubxbdew9IfstH0v7dQijexTBs9jbkkBIIXV-cs';
 
@@ -46,12 +46,27 @@ function updateStats() {
     var remainingImpressions = impressions - lviImpressions;
     var remainingClicks = clicks - lviClicks;
 
-    // Исключение LVI из списка сайтов для распределения
-    var sitesForDistribution = sites.filter(site => site !== "Low Volume Inventory");
+    // Обработка Spotify и Pandora
+    var specialSites = sites.filter(site => site.match(/spotify|pandora/i));
+    var specialSitesImpressions = 0;
+    var specialSitesClicks = 0;
+    if (specialSites.length > 0) {
+      var specialShare = 0.40; // 40% от оставшихся показов и кликов
+      specialSitesImpressions = remainingImpressions * specialShare;
+      specialSitesClicks = remainingClicks * specialShare;
+      remainingImpressions -= specialSitesImpressions;
+      remainingClicks -= specialSitesClicks;
+      // Распределение между специальными сайтами с дисперсией
+      var distributedSpecialImpressions = distributeRandomly(specialSitesImpressions, specialSites.length);
+      var distributedSpecialClicks = distributeRandomly(specialSitesClicks, specialSites.length);
+    }
 
-    // Распределение оставшихся показов и кликов по сайтам с рандомизацией
-    var distributedImpressions = distributeRandomly(remainingImpressions, sitesForDistribution.length);
-    var distributedClicks = distributeRandomly(remainingClicks, sitesForDistribution.length);
+    // Исключение LVI и специальных сайтов из списка сайтов для распределения
+    var sitesForRemainingDistribution = sites.filter(site => site !== "Low Volume Inventory" && !site.match(/spotify|pandora/i));
+
+    // Распределение оставшихся показов и кликов по оставшимся сайтам
+    var distributedRemainingImpressions = distributeRandomly(remainingImpressions, sitesForRemainingDistribution.length);
+    var distributedRemainingClicks = distributeRandomly(remainingClicks, sitesForRemainingDistribution.length);
 
     // Шаг 4: Запись данных в лист Stat by sites
     var statSheet = spreadsheet.getSheetByName('Stat by sites');
@@ -62,10 +77,20 @@ function updateStats() {
       statSheet.deleteRows(2, lastRow - 1);
     }
 
+    // Запись данных для каждого сайта
     sites.forEach(site => {
-      var siteImpressions = site === "Low Volume Inventory" ? lviImpressions : distributedImpressions.shift();
-      var siteClicks = site === "Low Volume Inventory" ? lviClicks : distributedClicks.shift();
-      var row = [site, siteImpressions, siteClicks];
+    var siteImpressions, siteClicks;
+    if (site === "Low Volume Inventory") {
+      siteImpressions = lviImpressions;
+      siteClicks = lviClicks;
+    } else if (specialSites.includes(site)) {
+      siteImpressions = distributedSpecialImpressions.shift();
+      siteClicks = distributedSpecialClicks.shift();
+    } else {
+      siteImpressions = distributedRemainingImpressions.shift();
+      siteClicks = distributedRemainingClicks.shift();
+    }
+    var row = [site, siteImpressions, siteClicks];
     statSheet.appendRow(row);
   });
 
