@@ -55,6 +55,13 @@ function updateStats() {
 
     // Шаг 4: Запись данных в лист Stat by sites
     var statSheet = spreadsheet.getSheetByName('Stat by sites');
+
+    // Удаление существующих данных, начиная со второй строки
+    var lastRow = statSheet.getLastRow();
+    if (lastRow > 1) {
+      statSheet.deleteRows(2, lastRow - 1);
+    }
+
     sites.forEach(site => {
       var siteImpressions = site === "Low Volume Inventory" ? lviImpressions : distributedImpressions.shift();
       var siteClicks = site === "Low Volume Inventory" ? lviClicks : distributedClicks.shift();
