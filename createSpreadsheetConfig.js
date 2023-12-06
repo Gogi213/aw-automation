@@ -123,7 +123,7 @@ const config = {
           headers: ['Totals by campaign,,,',
             'Campaign,Impressions,Cost,CPM'],
           merge: [1, 1, 1, 4]
-        },
+        },        
 
 
 
@@ -293,6 +293,9 @@ const config = {
         'SBS + GOH': {
           headers: ['Site,Viewable Impressions,Clicks,CTR']
         },
+        'SBS + GOH + CTV': {
+          headers: ['Site,Impressions,Clicks,CTR']
+        },          
         'SBS + ALL - GOH': {
           headers: ['Site,Impressions,Clicks,CTR']
         },
