@@ -2,14 +2,17 @@
 
 function createMultipleSpreadsheets() {
   const uniqueFileNames = getUniqueFileNames();
+
   uniqueFileNames.forEach((fileName) => {
     if (!fileName) return;
+
     if (isFileExists(fileName)) {
       Logger.log(`Файл с именем ${fileName} уже существует.`);
       return;
     }
+
     const newFile = createNewSpreadsheet(fileName);
-    createSheets(newFile, fileName, getFileType(fileName)); // Передаем fileName как аргумент
+    createSheets(newFile, fileName, getFileType(fileName));
     removeDefaultSheet(newFile);
 
     Logger.log(`Файл ${fileName} успешно создан.`);
@@ -25,9 +28,18 @@ function getUniqueFileNames() {
 }
 
 function isFileExists(fileName) {
-  const folder = DriveApp.getFolderById(config.folderId);
-  const files = folder.getFilesByName(fileName);
-  return files.hasNext();
+  const folderIds = [config.folderId, '1S2HuGudocrjfLY8Ag65RrYceCFZfzdzC', '1Voz3zu5Tkx6Gtdn9KOsnhXpAQB79yie3', '14WsWzAGV5OBOcOyc3vRBTtLAoPYytsfu', '1ZbnqzT5jGAxkL6bFt6V9aqZdnvs5VdAf', '1RJ67YMvjnypypU2gq-I-Utgmxlp-pi6t'];
+
+  for (let i = 0; i < folderIds.length; i++) {
+    const folder = DriveApp.getFolderById(folderIds[i]);
+    const files = folder.getFilesByName(fileName);
+
+    if (files.hasNext()) {
+      return true; // Файл найден в одной из папок
+    }
+  }
+
+  return false; // Файл не найден ни в одной из папок
 }
 
 // Новая функция для определения ID папки
@@ -151,4 +163,3 @@ function createSheetWithHeaders(spreadsheet, sheetData, fileType) {
     sheet.getRange(...merge).merge().setHorizontalAlignment('center');
   }
 }
-
