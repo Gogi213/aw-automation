@@ -1,6 +1,6 @@
 // statBySitesConfig
 
-function updateStats() {
+function updateStatBySites() {
   var folderIds = {
     'Display': configTotal.folderDisplay,
     'Audio': configTotal.folderAudio,
@@ -30,10 +30,14 @@ function updateStats() {
       var clicks = 0;
       for (var i = 0; i < dataRange.length; i++) {
         if (dataRange[i][30] === fileName) { // Столбец AE для имени файла
-          impressions += dataRange[i][9]; // Столбец J для показов, суммируем значения
-          clicks += dataRange[i][12]; // Столбец M для кликов, суммируем значения
+            if (fileName.includes("CTV")) {
+              impressions += dataRange[i][8]; // Столбец I для показов, если файл содержит CTV
+            } else {
+              impressions += dataRange[i][8]; // Столбец J для показов, в остальных случаях
+            }
+            clicks += dataRange[i][12]; // Столбец M для кликов, суммируем значения
+          }
         }
-      }
 
       // Шаг 3: Получение сайтов из листа sites
       var sitesSheet = SpreadsheetApp.openById(sitesSheetId).getSheetByName('sites');
@@ -85,7 +89,6 @@ function updateStats() {
         statSheet.deleteRows(2, lastRow - 1);
       }
 
-      // Запись данных для каждого сайта
       sites.forEach(site => {
         var siteImpressions, siteClicks;
         if (site === "Low Volume Inventory") {
@@ -98,9 +101,17 @@ function updateStats() {
           siteImpressions = distributedRemainingImpressions.shift();
           siteClicks = distributedRemainingClicks.shift();
         }
-        var row = [site, siteImpressions, siteClicks];
-        statSheet.appendRow(row);
-      });
+
+      var row;
+      if (fileName.includes("CTV")) {
+        // Если имя файла содержит "CTV", добавляем первый и второй столбцы
+        row = [site, siteImpressions];
+      } else {
+        // В противном случае добавляем все три столбца
+        row = [site, siteImpressions, siteClicks];
+      }
+      statSheet.appendRow(row);
+    });
 
       // Добавление формулы и форматирования в четвёртом столбце
       var lastRow = statSheet.getLastRow();
@@ -113,6 +124,10 @@ function updateStats() {
       var rangeClicks = statSheet.getRange(2, 3, lastRow - 1);
       rangeImpressions.setNumberFormat("#,##0");
       rangeClicks.setNumberFormat("#,##0");
+
+      var dataRange = statSheet.getDataRange(); // Получаем диапазон данных в листе
+      statSheet.getRange(2, 1, dataRange.getLastRow() - 1, dataRange.getLastColumn())
+        .sort({ column: 2, ascending: false }); // Сортируем данные по второму столбцу по убыванию
 
       // Добавление строки Total
       var totalRow = ["Total",
@@ -134,7 +149,7 @@ function updateStats() {
     var remaining = total;
 
     for (var i = 0; i < count - 1; i++) {
-      var max = Math.min(remaining, (1 + 0.20) * (total / count));
+      var max = Math.min(remaining, (1 + 0.10) * (total / count));
       var value = Math.random() * (max - total / count * 0.80) + total / count * 0.80;
       distribution.push(value);
       remaining -= value;
