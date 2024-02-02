@@ -33,7 +33,7 @@ function updateStatBySites() {
             if (fileName.includes("CTV")) {
               impressions += dataRange[i][8]; // Столбец I для показов, если файл содержит CTV
             } else {
-              impressions += dataRange[i][8]; // Столбец J для показов, в остальных случаях
+              impressions += dataRange[i][9]; // Столбец J для показов, в остальных случаях
             }
             clicks += dataRange[i][12]; // Столбец M для кликов, суммируем значения
           }
@@ -44,10 +44,11 @@ function updateStatBySites() {
       var sitesData = sitesSheet.getDataRange().getValues();
       var sites = [];
       for (var j = 0; j < sitesData.length; j++) {
-        if (sitesData[j][6] === fileName) { // Столбец G для имени файла
-          sites.push(sitesData[j][7]); // Столбец H для сайтов
+        if (sitesData[j][6] === fileName) {
+          sites.push(sitesData[j][7]);
         }
       }
+      shuffleArray(sites); // Перемешиваем список сайтов
 
       // Расчет процентов для LVI
       var lviPercentage = getLowVolumePercentage(fileName);
@@ -75,10 +76,26 @@ function updateStatBySites() {
 
       // Исключение LVI и специальных сайтов из списка сайтов для распределения
       var sitesForRemainingDistribution = sites.filter(site => site !== "Low Volume Inventory" && !site.match(/spotify|pandora/i));
+      shuffleArray(sitesForRemainingDistribution); // Перемешиваем оставшиеся сайты
 
       // Распределение оставшихся показов и кликов по оставшимся сайтам
       var distributedRemainingImpressions = distributeRandomly(remainingImpressions, sitesForRemainingDistribution.length);
       var distributedRemainingClicks = distributeRandomly(remainingClicks, sitesForRemainingDistribution.length);
+
+      // Новый код: Округление значений и корректировка остатка
+      distributedRemainingImpressions = distributedRemainingImpressions.map(Math.round);
+      distributedRemainingClicks = distributedRemainingClicks.map(Math.round);
+
+      let totalImpressions = impressions - lviImpressions - specialSitesImpressions;
+      let totalClicks = clicks - lviClicks - specialSitesClicks;
+      let sumRoundedImpressions = distributedRemainingImpressions.reduce((a, b) => a + b, 0);
+      let sumRoundedClicks = distributedRemainingClicks.reduce((a, b) => a + b, 0);
+
+      let diffImpressions = totalImpressions - sumRoundedImpressions;
+      let diffClicks = totalClicks - sumRoundedClicks;
+
+      lviImpressions += diffImpressions;
+      lviClicks += diffClicks;
 
       // Шаг 4: Запись данных в лист Stat by sites
       var statSheet = spreadsheet.getSheetByName('Stat by sites');
@@ -115,15 +132,19 @@ function updateStatBySites() {
 
       // Добавление формулы и форматирования в четвёртом столбце
       var lastRow = statSheet.getLastRow();
-      var range = statSheet.getRange(2, 4, lastRow - 1); // Начинаем с 2-й строки
-      range.setFormulaR1C1('=IFERROR(R[0]C[-1]/R[0]C[-2],0)');
-      range.setNumberFormat("0.00%");
+      if (!fileName.includes("CTV")) {
+        var range = statSheet.getRange(2, 4, lastRow - 1); // Начинаем с 2-й строки
+        range.setFormulaR1C1('=IFERROR(R[0]C[-1]/R[0]C[-2],0)');
+        range.setNumberFormat("0.00%");
+      }
 
       // Форматирование 2-го и 3-го столбцов
       var rangeImpressions = statSheet.getRange(2, 2, lastRow - 1);
       var rangeClicks = statSheet.getRange(2, 3, lastRow - 1);
       rangeImpressions.setNumberFormat("#,##0");
-      rangeClicks.setNumberFormat("#,##0");
+      if (!fileName.includes("CTV")) {
+        rangeClicks.setNumberFormat("#,##0");
+      }
 
       var dataRange = statSheet.getDataRange(); // Получаем диапазон данных в листе
       statSheet.getRange(2, 1, dataRange.getLastRow() - 1, dataRange.getLastColumn())
@@ -132,15 +153,18 @@ function updateStatBySites() {
       // Добавление строки Total
       var totalRow = ["Total",
         "=SUM(B2:B" + lastRow + ")",
-        "=SUM(C2:C" + lastRow + ")",
-        "=IFERROR(C" + (lastRow + 1) + "/B" + (lastRow + 1) + ",0)"];
+        fileName.includes("CTV") ? "" : "=SUM(C2:C" + lastRow + ")",
+        fileName.includes("CTV") ? "" : "=IFERROR(C" + (lastRow + 1) + "/B" + (lastRow + 1) + ",0)"];
       statSheet.appendRow(totalRow);
       statSheet.getRange(lastRow + 1, 1, 1, 4).setFontWeight("bold");
 
       // Форматирование тоталов
       statSheet.getRange(lastRow + 1, 2).setNumberFormat("#,##0");
-      statSheet.getRange(lastRow + 1, 3).setNumberFormat("#,##0");
-      statSheet.getRange(lastRow + 1, 4).setNumberFormat("0.00%");
+      if (!fileName.includes("CTV")) {
+        statSheet.getRange(lastRow + 1, 3).setNumberFormat("#,##0");
+        statSheet.getRange(lastRow + 1, 4).setNumberFormat("0.00%");
+      }
+
     }
   }
 
@@ -149,8 +173,8 @@ function updateStatBySites() {
     var remaining = total;
 
     for (var i = 0; i < count - 1; i++) {
-      var max = Math.min(remaining, (1 + 0.10) * (total / count));
-      var value = Math.random() * (max - total / count * 0.80) + total / count * 0.80;
+      var max = Math.min(remaining, (1 + 0.05) * (total / count));
+      var value = Math.random() * (max - total / count * 0.95) + total / count * 0.95;
       distribution.push(value);
       remaining -= value;
     }
@@ -172,4 +196,14 @@ function updateStatBySites() {
     }
     return 0;
   }
+
+  function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+  }
+
 }
